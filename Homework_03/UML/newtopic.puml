@@ -1,7 +1,7 @@
 @startuml
 participant User as U
 
-participant "BI Platform" as P
+participant "Data Platform" as P
 participant "Nexus" as N
 participant "DWH" as D
 participant "Git" as G
