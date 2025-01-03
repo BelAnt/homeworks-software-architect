@@ -1,0 +1,68 @@
+@startuml
+participant User as U
+
+participant "BI Platform" as P
+participant "Nexus" as N
+participant "DWH" as D
+participant "Git" as G
+participant "Kafka Consumer" as K
+participant "ETL Service" as E
+
+U -> P : Add new data source
+activate P
+
+P -> N : Get specs list 
+activate N
+
+N --> P : List of specs
+deactivate N
+
+P -> P : Current topics
+
+P -> U : List of new topics
+
+U -> P : Choose topic
+
+P -> N : Get spec file
+activate N
+
+N --> P : Spec
+deactivate N
+
+P -> P : Parse spec file
+
+P -> P : Genereate DDL & configs
+
+P -> U : Code for approve 
+
+U -> P : Approve
+
+P -> D : Execute DDL for new objects
+activate D
+
+P --> D : Result
+deactivate D
+
+P -> G : Publish configs for services
+activate G
+
+G --> P : Result
+
+G -> K : Sync configs and run new worker
+activate K
+
+G -> E : Sync configs and run new worker
+activate E
+deactivate G
+
+
+K -> P : State
+deactivate K
+
+E -> P : State
+deactivate E
+
+P -> U : State of process
+deactivate P
+
+@enduml
